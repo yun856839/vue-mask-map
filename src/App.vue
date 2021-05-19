@@ -52,9 +52,12 @@
 </template>
 
 <script>
+import L from "leaflet";
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import cityName from "./assets/cityName.json";
+
+let openStreetMap = {}; // eslint-disable-line no-unused-vars
 
 export default {
   name: "App",
@@ -73,8 +76,27 @@ export default {
       "https://raw.githubusercontent.com/kiang/pharmacies/master/json/points.json";
     const res = await this.$http.get(API);
     this.data = res.data.features;
+
+    openStreetMap = L.map("map", {
+      center: [23.982028, 120.6847551],
+      // center: [25.042474, 121.513729],
+      zoom: 16,
+    });
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
+    }).addTo(openStreetMap);
   },
 };
 </script>
+
+<style scoped>
+#app {
+}
+#map {
+  width: 800px;
+  height: 600px;
+}
+</style>
 
 
