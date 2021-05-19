@@ -60,12 +60,19 @@ export default {
   name: "App",
   data() {
     return {
+      data: [],
       cityName,
       select: {
         city: "臺北市",
         area: "中正區",
       },
     };
+  },
+  async mounted() {
+    const API =
+      "https://raw.githubusercontent.com/kiang/pharmacies/master/json/points.json";
+    const res = await this.$http.get(API);
+    this.data = res.data.features;
   },
 };
 </script>
