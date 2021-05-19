@@ -8,7 +8,17 @@
             >縣市：</label
           >
           <div class="flex-fill">
-            <select id="cityName" class="form-control"></select>
+            <select id="cityName" class="form-control" v-model="select.city">
+              <option value="" selected disabled>請選擇縣市</option>
+              <option
+                :value="city.CityName"
+                v-for="city in cityName"
+                :key="city.CityName"
+              >
+                {{ city.CityName }}
+              </option>
+              pt
+            </select>
           </div>
         </div>
         <div class="form-group d-flex">
@@ -16,7 +26,18 @@
             >地區：</label
           >
           <div class="flex-fill">
-            <select id="area" class="form-control"></select>
+            <select id="area" class="form-control" v-model="select.area">
+              <option value="" selected disabled>請選擇地區</option>
+              <option
+                :value="area.AreaName"
+                v-for="area in cityName.find(
+                  (city) => select.city === city.CityName
+                ).AreaList"
+                :key="area.AreaName"
+              >
+                {{ area.AreaName }}
+              </option>
+            </select>
           </div>
         </div>
       </div>
@@ -37,6 +58,15 @@ import cityName from "./assets/cityName.json";
 
 export default {
   name: "App",
+  data() {
+    return {
+      cityName,
+      select: {
+        city: "臺北市",
+        area: "中正區",
+      },
+    };
+  },
 };
 </script>
 
