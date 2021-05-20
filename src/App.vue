@@ -93,7 +93,7 @@ export default {
   },
   watch: {
     pharmaciesMark(newValue) {
-      console.log(newValue);
+      // console.log(newValue);
       this.updateMap();
     },
   },
