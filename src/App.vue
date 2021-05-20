@@ -58,6 +58,16 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import cityName from "./assets/cityName.json";
 
 let openStreetMap = {}; // eslint-disable-line no-unused-vars
+var redIcon = L.icon({
+  iconUrl:
+    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
+  shadowUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
 
 export default {
   name: "App",
@@ -71,6 +81,32 @@ export default {
       },
     };
   },
+  computed: {
+    pharmaciesMark() {
+      return this.data.filter((pharmacy) => {
+        if (!this.select.area) {
+          return pharmacy.properties.country === this.select.city;
+        }
+        return pharmacy.properties.town === this.select.area;
+      });
+    },
+  },
+  watch: {
+    pharmaciesMark(newValue) {
+      console.log(newValue);
+      this.updateMap();
+    },
+  },
+  methods: {
+    updateMap() {
+      this.pharmaciesMark.forEach((pharmacy) => {
+        L.marker(
+          [pharmacy.geometry.coordinates[1], pharmacy.geometry.coordinates[0]],
+          { icon: redIcon }
+        ).addTo(openStreetMap);
+      });
+    },
+  },
   async mounted() {
     const API =
       "https://raw.githubusercontent.com/kiang/pharmacies/master/json/points.json";
@@ -79,7 +115,6 @@ export default {
 
     openStreetMap = L.map("map", {
       center: [23.982028, 120.6847551],
-      // center: [25.042474, 121.513729],
       zoom: 16,
     });
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
