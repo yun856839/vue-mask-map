@@ -57,7 +57,7 @@ import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import cityName from "./assets/cityName.json";
 
-let openStreetMap = {}; // eslint-disable-line no-unused-vars
+let openStreetMap = {};
 var redIcon = L.icon({
   iconUrl:
     "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
@@ -92,8 +92,8 @@ export default {
     },
   },
   watch: {
+    /* eslint-disable */
     pharmaciesMark(newValue) {
-      // console.log(newValue);
       this.updateMap();
     },
   },
