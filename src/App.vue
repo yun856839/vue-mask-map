@@ -99,11 +99,38 @@ export default {
   },
   methods: {
     updateMap() {
+      // 清除 Mark 避免圖層多於疊加
+      openStreetMap.eachLayer((layer) => {
+        if (layer instanceof L.Marker) {
+          openStreetMap.removeLayer(layer);
+        }
+      });
+
       this.pharmaciesMark.forEach((pharmacy) => {
         L.marker(
           [pharmacy.geometry.coordinates[1], pharmacy.geometry.coordinates[0]],
           { icon: redIcon }
-        ).addTo(openStreetMap);
+        )
+          .addTo(openStreetMap)
+          .bindPopup(
+            `<p style="margin: 0"><strong style="font-size: 24px;">
+            ${pharmacy.properties.name}</strong></p>
+            <hr style="margin: 8px; border: 1px solid red"/>
+            <strong style="font-size: 20px; color: blue;">口罩剩餘：成人 - ${
+              pharmacy.properties.mask_adult
+                ? `${pharmacy.properties.mask_adult} 個`
+                : "未取得資料"
+            } / 兒童 - ${
+              pharmacy.properties.mask_child
+                ? `${pharmacy.properties.mask_child} 個`
+                : "未取得資料"
+            }</strong><br>
+            地址: ${pharmacy.properties.address}<br>
+            電話: ${pharmacy.properties.phone}<br>
+            <small style="color: red"><strong>最後更新時間: ${
+              pharmacy.properties.updated
+            }</strong></small>`
+          );
       });
     },
   },
@@ -126,8 +153,6 @@ export default {
 </script>
 
 <style scoped>
-#app {
-}
 #map {
   width: 800px;
   height: 600px;
